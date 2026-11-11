@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Model Terminology · Product Data</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Noto+Sans&display=swap" rel="stylesheet">
+<style>
+/* ============================================================================
+   Shared styles for index.html.
+   Laerdal Life design system v4.5.0, as used in the data model catalog:
+   Lato, primary #2e7fa1, 8px grid, radii 4/8/16, dividers over boxes.
+   ========================================================================== */
+:root{
+  /* base */
+  --life-white:#ffffff;
+  --life-black:#1a1a1a;
+
+  /* neutral scale */
+  --n020:#fafafa; --n050:#f2f2f2; --n100:#e5e5e5; --n200:#cccccc;
+  --n400:#949494; --n600:#666666; --n700:#4d4d4d;
+
+  /* primary scale */
+  --p020:#f1fbfe; --p050:#e3f5fc; --p100:#d4e9f2; --p400:#519dbd;
+  --p500:#2e7fa1; --p600:#276d8b; --p700:#215369;
+
+  /* the green that marks a data product, shared with the 3P pages */
+  --data:#2f8f5b;
+  --data-soft:#eaf5ee;
+  --data-ink:#1f6b43;
+
+  /* semantic, light mode */
+  --bg:var(--life-white);
+  --bg-subtle:var(--n020);
+  --text:var(--life-black);
+  --text-subtle:var(--n600);
+  --text-primary:var(--p500);
+  --border:var(--n200);
+  --divider:var(--n100);
+
+  /* spacing, 8px grid */
+  --s-050:4px; --s-100:8px; --s-150:12px; --s-200:16px;
+  --s-300:24px; --s-400:32px; --s-600:48px; --s-800:64px;
+
+  /* shape */
+  --r-sm:4px; --r-md:8px;
+
+  /* data product names are set in monospace, as in the catalog */
+  --mono:'SF Mono', ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+}
+
+*{box-sizing:border-box;}
+html{font-size:16px;}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:'Lato','Noto Sans',sans-serif;font-size:1rem;line-height:1.5;
+  -webkit-font-smoothing:antialiased;}
+
+/* every interactive element shows a focus ring */
+:focus-visible{outline:2px solid var(--p500);outline-offset:2px;}
+
+.wrap{max-width:1280px;margin:0 auto;padding:var(--s-600) var(--s-400) var(--s-800);}
+
+/* ---------- page heading ---------- */
+.eyebrow{font-size:.75rem;font-weight:700;color:var(--text-primary);margin:0 0 var(--s-100);}
+h1{font-size:2rem;font-weight:700;line-height:1.2;margin:0 0 var(--s-150);letter-spacing:-.01em;}
+.lede{font-size:1.125rem;color:var(--text-subtle);margin:0 0 var(--s-400);max-width:720px;}
+
+/* ---------- view selector ---------- */
+.toolbar{display:flex;align-items:center;gap:var(--s-100);flex-wrap:wrap;
+  padding-bottom:var(--s-200);border-bottom:1px solid var(--border);margin-bottom:var(--s-400);}
+.toolbar .label{font-size:.875rem;color:var(--text-subtle);margin-right:var(--s-100);}
+.chip{font-family:inherit;font-size:.875rem;min-height:32px;padding:var(--s-050) var(--s-200);
+  border:1px solid var(--border);border-radius:var(--r-sm);background:var(--bg);
+  color:var(--text-subtle);cursor:pointer;transition:border-color .15s ease,color .15s ease;}
+.chip:hover{border-color:var(--p400);color:var(--text-primary);}
+.chip[aria-pressed="true"]{background:var(--p500);border-color:var(--p500);color:var(--life-white);}
+
+/* ---------- the data product label: words first, colour second ---------- */
+.status{display:inline-block;font-size:.75rem;font-weight:700;line-height:1;white-space:nowrap;
+  padding:var(--s-050) var(--s-100);border-radius:var(--r-sm);}
+.status.product{background:var(--data-soft);color:var(--data-ink);}
+.status.notproduct{background:var(--n050);color:var(--n700);box-shadow:inset 0 0 0 1px var(--n200);}
+/* the line under a term name: tag, then data product name */
+.tmeta{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-050) var(--s-100);margin-top:var(--s-100);}
+.pname{font-family:var(--mono);font-size:.8125rem;color:var(--text-subtle);overflow-wrap:anywhere;}
+
+/* ---------- section headings ---------- */
+.section-head{margin:0 0 var(--s-200);}
+.section-head h2{font-size:1.5rem;font-weight:700;line-height:1.25;margin:0;}
+.section-head p{font-size:.9375rem;color:var(--text-subtle);margin:var(--s-050) 0 0;}
+
+/* ---------- everything the .md says about a term ---------- */
+.detail{display:grid;grid-template-columns:168px minmax(0,1fr);column-gap:var(--s-300);
+  row-gap:var(--s-150);margin:0;max-width:880px;}
+.detail dt{font-size:.75rem;font-weight:700;color:var(--text-primary);padding-top:3px;}
+.detail dd{margin:0;font-size:.9375rem;}
+.detail .dnote{display:block;margin-top:var(--s-100);}
+.detail.stacked{grid-template-columns:1fr;row-gap:0;}
+.detail.stacked dt{margin-top:var(--s-150);}
+.detail.stacked dt:first-child{margin-top:0;}
+
+footer{margin-top:var(--s-800);padding-top:var(--s-300);border-top:1px solid var(--border);
+  font-size:.75rem;color:var(--text-subtle);}
+
+@media (prefers-reduced-motion:reduce){*{transition:none !important;}}
+@media (max-width:760px){
+  .wrap{padding:var(--s-400) var(--s-200) var(--s-600);}
+  .detail{grid-template-columns:1fr;row-gap:0;}
+  .detail dt{margin-top:var(--s-150);}
+}
+
+/* ---- Page header standard: identical on every page (eyebrow, heading, subtitle, nav, draft pill) ---- */
+body { margin: 0 !important; padding: 40px 24px 64px !important; background: #fafafa !important; }
+body nav.overview { display: block !important; margin: 0 0 14px !important; font-size: 16px !important; line-height: 1.5 !important; }
+body nav.overview a {
+  display: inline-flex !important; align-items: center; gap: 6px;
+  font-size: 12px !important; font-weight: 700 !important; letter-spacing: 0.04em !important;
+  color: #666666 !important; text-decoration: none;
+  padding: 4px 8px !important; margin-left: -8px !important; border-radius: 5px;
+  box-sizing: content-box !important; min-height: 24px !important;
+}
+body nav.overview a:hover { color: #1a1a1a !important; background: rgba(0,0,0,0.045); }
+body nav.overview a svg { width: 15px !important; height: 15px !important; }
+body .ph-eyebrow {
+  font-family: 'Lato', 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 11px !important; font-weight: 700 !important; line-height: 1.5 !important;
+  text-transform: uppercase !important; letter-spacing: 0.18em !important;
+  color: #166534 !important; margin: 0 0 10px !important;
+}
+body .ph-eyebrow .draft-tag {
+  display: inline-block; margin: 0 0 0 8px; padding: 1px 7px; border-radius: 999px;
+  background: #f8e2bf; color: #6f5320; font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  position: static; vertical-align: 1px;
+}
+body .ph-title {
+  font-family: 'Lato', 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 36px !important; font-weight: 900 !important; line-height: 1.08 !important;
+  letter-spacing: -0.025em !important; color: #1a1a1a !important; margin: 0 0 14px !important;
+}
+body .ph-sub {
+  font-family: 'Lato', 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 16px !important; font-weight: 400 !important; line-height: 1.55 !important;
+  color: #666666 !important; margin: 0 0 44px !important; max-width: 680px !important;
+}
+body .ph-sub strong { color: #1a1a1a; font-weight: 700; }
+@media (max-width: 860px) { body .ph-title { font-size: 28px !important; } }
+.wrap { padding: 0 !important; }
+
+/* ---- Page footer standard: identical on every page (back link left, confidentiality line right) ---- */
+body .page-footer {
+  display: flex !important; justify-content: space-between !important; align-items: center !important;
+  margin-top: 48px !important; padding: 16px 0 0 !important; border-top: 1px solid #e5e5e5 !important;
+  font-size: 11px !important; font-weight: 400 !important; line-height: 1.5 !important;
+  color: #767676 !important; text-align: left !important; background: none !important;
+}
+body .page-footer a { color: #767676 !important; text-decoration: none !important; }
+body .page-footer a:hover { color: #1a1a1a !important; }
+body .page-footer > span:last-child { margin-left: auto !important; text-align: right; }
+body .footer-note { margin-top: 48px; font-size: 11px; line-height: 1.6; color: #767676; max-width: 760px; }
+body .footer-note + .page-footer { margin-top: 16px !important; }
+body .page-hint { margin: 16px 0 0; font-size: 12px; color: #767676; }
+</style>
+<style>
+/* ============================================================================
+   SIMULATION ASSESSMENT TERMINOLOGY
+   Definitions live in terms.js, copied word for word from notes/terminology.md.
+   Chronological: cards, one stage per row, flowing top to bottom.
+   Alphabetical: a vocabulary list of rows that open in place.
+   Purpose · Practice · Proof: five columns of cards that open in place.
+   ========================================================================== */
+
+/* the link back to the Overview page of the published site, as on the other
+   pages there. It only leads anywhere on the published page. */
+.overview{margin-bottom:var(--s-200);}
+.overview a{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;
+  letter-spacing:.04em;color:var(--text-subtle);text-decoration:none;
+  padding:4px 8px;margin-left:-8px;border-radius:5px;min-height:24px;}
+.overview a:hover{color:var(--text);background:var(--bg-subtle);}
+.overview a svg{width:15px;height:15px;}
+
+/* the title stands alone, so it needs room above the view switcher */
+header h1{margin-bottom:var(--s-300);}
+.view-intro{margin:0 0 var(--s-400);}
+.view-intro h2{font-size:1.5rem;font-weight:700;line-height:1.25;margin:0;}
+
+/* ---------- the card ---------- */
+.card{position:relative;display:flex;flex-direction:column;width:100%;text-align:left;
+  font-family:inherit;color:inherit;background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:var(--s-200);cursor:pointer;
+  transition:border-color .15s ease,box-shadow .15s ease,transform .15s ease,background .15s ease;}
+.card:hover{border-color:var(--p400);box-shadow:0 4px 12px rgba(0,0,0,.08);transform:translateY(-1px);}
+/* the open card keeps a tint, so it is clear which card owns the panel */
+.card[aria-expanded="true"]{background:var(--p020);border-color:var(--p500);box-shadow:0 0 0 1px var(--p500);transform:none;}
+/* data cards share one shape: a 4px top bar, green for a data product, grey for not */
+.card.product{border-top:4px solid var(--data);padding-top:13px;}
+.card.notproduct{border-top:4px solid var(--n400);padding-top:13px;}
+.card.product[aria-expanded="true"]{border-top-color:var(--data);}
+.card.notproduct[aria-expanded="true"]{border-top-color:var(--n400);}
+.card .tname{display:block;font-size:1.0625rem;font-weight:700;line-height:1.3;}
+/* on a card the tag and the data product name stack */
+.card .tmeta{flex-direction:column;align-items:flex-start;}
+.card .pname{font-size:.75rem;}
+.card .def{display:block;flex:1;margin-top:var(--s-150);font-size:.875rem;color:var(--text-subtle);}
+/* the cue to open the card */
+.card .foot{display:flex;align-items:center;justify-content:flex-end;
+  margin-top:var(--s-200);padding-top:var(--s-150);border-top:1px solid var(--divider);font-size:.8125rem;}
+.cue{display:inline-flex;align-items:center;gap:var(--s-050);color:var(--p600);font-weight:700;white-space:nowrap;}
+.cue svg{width:16px;height:16px;transition:transform .15s ease;}
+.card:hover .cue{color:var(--p700);}
+.card[aria-expanded="true"] .cue svg{transform:rotate(180deg);}
+
+/* activities: quieter cards, no tag */
+.card.activity{background:var(--bg-subtle);border-color:var(--divider);}
+.card.activity[aria-expanded="true"]{background:var(--p020);border-color:var(--p500);}
+.card.activity .tname{font-size:1rem;}
+.card.activity .foot{border-top-color:var(--n100);}
+
+/* ---------- chronological: a timeline of stages ---------- */
+/* each stage: a heading on the timeline rail, its cards in one row below */
+.stage{position:relative;padding:0 0 var(--s-600) var(--s-400);}
+/* the rail that joins the stages, top to bottom */
+.stage::before{content:"";position:absolute;left:7px;top:14px;bottom:-6px;width:2px;background:var(--p100);}
+.stages .stage:last-child::before{display:none;}
+.stage-label{position:relative;display:flex;align-items:baseline;gap:var(--s-150);flex-wrap:wrap;
+  margin-bottom:var(--s-200);}
+.stage-label::before{content:"";position:absolute;left:calc(-1 * var(--s-400));top:6px;width:16px;height:16px;
+  border-radius:50%;background:var(--bg);border:3px solid var(--p500);box-sizing:border-box;}
+.stage-label h3{font-size:1.25rem;font-weight:700;line-height:1.3;margin:0;}
+.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--s-200);align-items:stretch;}
+
+/* the activities, set apart from the data */
+.around{margin-top:var(--s-200);padding-top:var(--s-400);border-top:1px solid var(--border);}
+.around .stage::before{display:none;}
+.around .stage-label::before{border-color:var(--n400);}
+.around .cards{grid-template-columns:repeat(4,minmax(0,1fr));align-items:start;}
+
+/* ---------- the detail panel, opened under a row of cards ---------- */
+.reveal{grid-column:1 / -1;position:relative;margin-top:var(--s-050);background:var(--bg-subtle);
+  border:1px solid var(--border);border-radius:var(--r-md);padding:var(--s-400);}
+.reveal:focus{outline:none;}
+/* the pointer to the open card; the script sets --pointer */
+.reveal::before{content:"";position:absolute;top:-8px;left:var(--pointer,32px);width:14px;height:14px;
+  background:var(--bg-subtle);border-left:1px solid var(--border);border-top:1px solid var(--border);
+  transform:rotate(45deg);}
+.reveal h3{font-size:1.5rem;font-weight:700;line-height:1.2;margin:0;padding-right:var(--s-600);}
+.reveal .tmeta{margin-top:var(--s-100);}
+.reveal .pname{font-size:.875rem;}
+.reveal .detail{margin-top:var(--s-300);}
+.reveal .close{position:absolute;top:var(--s-200);right:var(--s-200);width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;background:none;border:none;
+  border-radius:var(--r-sm);color:var(--n700);cursor:pointer;}
+.reveal .close:hover{background:var(--n050);}
+.reveal .close svg{width:20px;height:20px;}
+
+/* ---------- alphabetical: vocabulary rows ---------- */
+/* one column grid shared by the summary line and the opened details,
+   so the details hang under the definition */
+.row{--cols:minmax(240px,320px) minmax(0,1fr) 96px;border-bottom:1px solid var(--divider);}
+.row:first-of-type{border-top:1px solid var(--border);}
+.row summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:var(--cols);column-gap:var(--s-300);
+  align-items:start;padding:var(--s-200) var(--s-100);border-radius:var(--r-sm);transition:background .12s ease;}
+.row summary::-webkit-details-marker{display:none;}
+.row summary:hover{background:var(--bg-subtle);}
+.row .tname{display:block;font-size:1.0625rem;font-weight:700;line-height:1.3;}
+.row .def{font-size:.9375rem;color:var(--text-subtle);}
+.row .def .full, .row .def .dnote{display:none;}
+.row[open] .def{color:var(--text);}
+.row[open] .def .short{display:none;}
+.row[open] .def .full{display:inline;}
+.row[open] .def .dnote{display:block;margin-top:var(--s-100);}
+.row .cue{justify-content:flex-end;font-size:.8125rem;}
+.row[open] .cue svg{transform:rotate(180deg);}
+.row .body{display:grid;grid-template-columns:var(--cols);column-gap:var(--s-300);padding:0 var(--s-100) var(--s-300);}
+.row .body .detail{grid-column:2;grid-template-columns:152px minmax(0,1fr);max-width:none;}
+
+/* ---------- Purpose, Practice, Proof: columns of cards ---------- */
+/* headings share one row across the columns, so their underlines line up */
+.threep{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:auto auto;column-gap:var(--s-200);}
+.threep > div{display:grid;grid-row:span 2;grid-template-rows:subgrid;align-content:start;}
+.threep .stack{align-self:start;}
+.threep .colhead{padding-bottom:var(--s-150);margin-bottom:var(--s-200);border-bottom:2px solid var(--p500);}
+.threep .colhead h3{font-size:1.25rem;font-weight:700;margin:0;}
+.threep .colhead p{font-size:.8125rem;color:var(--text-subtle);margin:var(--s-050) 0 0;}
+.threep .stack{display:flex;flex-direction:column;gap:var(--s-150);}
+.threep .card .detail{display:none;margin-top:var(--s-200);text-align:left;}
+.threep .card[aria-expanded="true"] .detail{display:grid;}
+.threep .card[aria-expanded="true"] .def{display:none;}
+
+@media (prefers-reduced-motion:reduce){.card,.cue svg{transition:none;}.card:hover{transform:none;}}
+@media (max-width:1100px){
+  .cards, .around .cards{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .threep{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:var(--s-400);}
+  .row{--cols:minmax(0,1fr) 96px;}
+  .row .def{grid-column:1;grid-row:2;margin-top:var(--s-100);}
+  .row .body .detail{grid-column:1 / -1;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow ph-eyebrow">Data &amp; AI strategy · data model terminology<span class="draft-tag">Draft</span></div>
+  <h1 class="ph-title">Data Model Terminology</h1>
+  <p class="lede ph-sub">The words we use for simulation assessment, and which are data products.</p>
+</header>
+
+<main>
+  <div class="toolbar" role="group" aria-label="Order the terms">
+    <span class="label">View</span>
+    <button class="chip" data-view="chronological" aria-pressed="true">Chronological</button>
+    <button class="chip" data-view="alphabetical" aria-pressed="false">Alphabetical</button>
+    <button class="chip" data-view="threep" aria-pressed="false">Purpose · Practice · Proof</button>
+  </div>
+  <div id="board"></div>
+</main>
+
+<footer class="page-footer">
+    <span>Laerdal Medical · 04.11.2026</span>
+  </footer>
+
+</div>
+
+<script>
+/* ==========================================================================
+   The terms and their placement, read by index.html.
+
+   TERMS is copied word for word from notes/terminology.md.
+   check_terms.py compares every string in it with that file.
+   ======================================================================== */
+window.TERMS = [
+  {"id": "target-participant", "name": "Target participant", "product": "target_participant", "definition": "The intended individual, team, or unit, described by segment and experience level, for whom the learning outcomes are designed.", "example": "First-year nursing students; an emergency department team training in situ.", "aka": "Participant or learner. INACSL’s standard term is “participant (also known as learner)”.", "why": "“Participant” is role-based, so it works for an individual, a team or a unit. “Learner” implies one identified individual.", "not": "The identity of the people who take part in a session.", "relates": "Learning_outcome; Laerdal ID (the actual people who take part)."},
+  {"id": "learning-outcome", "name": "Learning outcome", "product": "learning_outcome", "definition": "A specific, observable statement of what participants should demonstrate in a session as a result of training.", "example": "“Uses closed-loop communication during a resuscitation.”", "aka": "Learning objective (widely used); training goal.", "relates": "Defines which expected actions are needed; creates the basis for scenarios; mapped to a competence / performance framework."},
+  {"id": "scenario", "name": "Scenario", "product": "scenario", "definition": "A structured representation of a real-world clinical situation, designed to provide the context for participants to practice and demonstrate expected actions in a safe environment.", "example": "A progressing clinical case, such as a deteriorating asthma patient; a cardiac arrest team session that ends in return of circulation.", "aka": "Clinical scenario (SSH / INACSL Healthcare Simulation Dictionary); case or patient case."},
+  {"id": "expected-actions", "name": "Expected actions", "product": "expected_actions", "definition": "The specific, observable actions participants are expected to perform to show a learning outcome has been achieved. Written for the scenario; an action can be marked critical when it is required.", "example": "Repeats back an order in closed-loop communication; chest compressions at the target depth.", "aka": "Critical actions (AHA checklists, SSET, vrClinicals); expected behaviours (Creighton CCEI); performance or behavioural indicators.", "relates": "Lives in the assessment tool; derived from the learning outcome."},
+  {"id": "assessment-tool", "name": "Assessment tool", "product": "assessment_tool", "definition": "A defined structure that sets out what participant performance is assessed against and how that performance is scored.", "example": "Creighton CCEI, Lasater Clinical Judgment Rubric, TeamSTEPPS Team Performance Observation Tool.", "aka": "Assessment or evaluation instrument; rubric and checklist are types of assessment tool.", "relates": "May apply to a framework; contains the expected actions."},
+  {"id": "scenario-assessment", "name": "Scenario assessment", "product": "scenario_assessment", "definition": "Brings together the expected and critical actions and scoring logic used to assess performance in a specific scenario.", "relates": "Assessment tool, learning outcomes, expected actions and scenario; scored to give the assessment result."},
+  {"id": "competence-performance-framework", "name": "Competence / performance framework", "product": "competence_performance_framework", "definition": "A published description of the competencies or performance expectations for participants, used as the standard which scenarios and assessments are built against.", "example": "AACN Essentials and NCSBN CJMM (nursing); EPAs (medical education); TeamSTEPPS (team performance); CanMEDS; ACGME Milestones.", "aka": "Competence framework (also written competency framework).", "relates": "Learning outcomes, expected actions and assessment tools are mapped to it."},
+  {"id": "modality", "name": "Modality", "product": "modality", "definition": "The format through which an educational or quality improvement activity is delivered.", "example": "Manikin-based simulation, virtual reality.", "aka": "Simulation method or type.", "relates": "Training session."},
+  {"id": "training-session", "name": "Training session", "product": "training_session", "definition": "A single run of a learning activity involving one or more participants, with a defined start and end (runs that time out or are abandoned also count). A run is one attempt. Repeating the activity or starting over begins a new training session, while pausing and resuming stay inside the same training session.", "example": "A YouSim conversation with a virtual patient; an abandoned chest pain scenario on SimMan with several participants.", "aka": "Simulation session; scenario run; session.", "not": "A user logging into a platform without taking part in a learning activity, e.g. creating a course on SimCapture or purchasing a product on Laerdal Connect.", "relates": "Scenario; modality; output; assessment result."},
+  {"id": "output", "name": "Session output", "definition": "Everything captured from a training session: transcript, audio or video, event log, facilitator annotations and completed forms.", "example": "The full transcript of a conversation with a virtual patient; the event log from a manikin session.", "relates": "Evidence is taken from it; the assessment result is worked out from it.", "operational": true},
+  {"id": "evidence", "name": "Session evidence", "definition": "The specific part of an output that shows whether an expected action was performed.", "example": "The expected action is “calls for help”. The recording shows the participant saying “Please call the emergency team” at 01:20. That moment is the evidence.", "relates": "Found by matching the output against the expected actions in the assessment tool; the assessment result is derived from it.", "operational": true},
+  {"id": "assessment-result", "name": "Assessment result", "product": "assessment_result", "definition": "The completed assessment tool, showing whether each expected action was achieved.", "example": "A completed Creighton evaluation with a score of 19 out of 20.", "aka": "SimCapture calls the completed record an “evaluation”. It can also be a score or a rating.", "relates": "Derived from evidence; forms the basis for feedback."},
+  {"id": "prebrief", "name": "Prebrief", "definition": "The orientation given to participants before a session begins. It sets out the learning outcomes and expectations, explains the environment, equipment and roles, and creates the psychological safety for the participants to engage and learn.", "operational": true},
+  {"id": "debrief", "name": "Debrief", "definition": "A facilitated conversation in which participants reflect on an experience, to explore and understand the relationships between events, actions, thoughts, feelings and performance outcomes. It is a guided dialogue that uncovers the assumptions behind participants’ actions, so they can be understood and, where needed, corrected.", "operational": true},
+  {"id": "assessment", "name": "Assessment", "definition": "The systematic process of gathering, interpreting and using information about participant performance to inform teaching, enhance learning and, ultimately, improve patient outcomes. Not merely a measurement of knowledge or skills but a dynamic, evidence-informed practice. Its result is the basis for feedback.", "formative": "Carried out during or after a learning experience to show progress, guide reflection and support mastery learning. Informs formative feedback.", "summative": "Used to judge competence against defined standards, often in high-stakes or credentialing contexts. Informs summative feedback."},
+  {"id": "feedback", "name": "Feedback", "definition": "Information and guidance given to participants about their performance or progress, based on an assessment, to improve their actions or behaviour. It can be on a screen, on paper, in conversation, live or afterwards. To be useful it should be clear, specific, timely and encourage active participation.", "note": "Feedback is based on an assessment but is not one."},
+  {"id": "formative-feedback", "name": "Formative feedback", "definition": "Ongoing guidance that helps participants see their strengths and areas for growth, given during or after a learning experience."},
+  {"id": "summative-feedback", "name": "Summative feedback", "definition": "Feedback that states how performance measured up at the end of a learning process, based on the assessment result, and points to next steps."}
+];
+
+/* ==========================================================================
+   PLACEMENT holds page decisions, not definitions: when each term reaches
+   us as data, and where it sits in the 3P model.
+   ======================================================================== */
+window.PLACEMENT = {
+  /* the stages data arrives in, and which data terms arrive in each */
+  arrival: [
+    {key: "reference", title: "Reference", note: "Exists before any design starts",
+     terms: ["competence-performance-framework", "modality"]},
+    {key: "design", title: "Design", note: "Set when a scenario is built",
+     terms: ["target-participant", "learning-outcome", "expected-actions", "scenario", "assessment-tool", "scenario-assessment"]},
+    {key: "session", title: "During a training session", note: "Captured while the session runs",
+     terms: ["training-session", "output"]},
+    {key: "after", title: "After the session", note: "Worked out from the output",
+     terms: ["evidence", "assessment-result"]}
+  ],
+
+  /* terms that produce no record of their own, in the order they happen */
+  activities: ["prebrief", "assessment", "feedback", "formative-feedback", "summative-feedback", "debrief"],
+
+  /* the two kinds of feedback sit under Feedback */
+  parent: {"formative-feedback": "feedback", "summative-feedback": "feedback"},
+
+
+  /* the Purpose, Practice, Proof model, following the terminology canvas */
+  threep: [
+    {title: "Frame", ask: "Who is it for?",
+     terms: ["target-participant"]},
+    {title: "Purpose", ask: "What do you want to achieve?",
+     terms: ["learning-outcome", "prebrief"]},
+    {title: "Practice", ask: "What experience gives the opportunity for it?",
+     terms: ["scenario", "modality", "feedback", "formative-feedback", "debrief"]},
+    {title: "Proof", ask: "How do you want to see it demonstrated?",
+     terms: ["expected-actions", "competence-performance-framework", "assessment-tool", "scenario-assessment", "assessment", "summative-feedback"]},
+    {title: "Proof, per session", ask: "What the session produced",
+     terms: ["training-session", "output", "evidence", "assessment-result"]}
+  ]
+};
+
+/* ==========================================================================
+   HELPERS used by all three pages
+   ======================================================================== */
+window.TERM_BY_ID = {};
+window.TERMS.forEach(function (term) { window.TERM_BY_ID[term.id] = term; });
+
+function escapeText(text) {
+  return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+/* let long data product names break after each underscore */
+function productNameHtml(name) {
+  return escapeText(name).replace(/_/g, "_<wbr>");
+}
+
+/* the first sentence of a definition, for a one-line summary */
+function firstSentence(text) {
+  var match = text.match(/^.*?[.!?](?=\s+[A-Z\u201c]|$)/);
+  return match ? match[0] : text;
+}
+
+/* Data terms carry one of two tags: "Data product", or "Data stays in product"
+   for data that is recorded but not published as a product (output, evidence).
+   Terms around the simulation carry no tag; their section says what they are.
+   Prebrief and debrief are part of the output, so the .md's "operational
+   data" flag is not shown. */
+function statusOf(term) {
+  if (term.product) { return {kind: "product", label: "Data product", mark: "\u25CF"}; }
+  var isData = window.PLACEMENT.arrival.some(function (stage) { return stage.terms.indexOf(term.id) !== -1; });
+  if (isData) { return {kind: "notproduct", label: "Data stays in product", mark: "\u25CB"}; }
+  return {kind: "none", label: "", mark: ""};
+}
+
+/* the tag. The filled or hollow dot repeats the meaning in shape, not only colour. */
+function statusHtml(term) {
+  var status = statusOf(term);
+  if (status.kind === "none") { return ""; }
+  return '<span class="status ' + status.kind + '"><span aria-hidden="true">' + status.mark + '</span> ' +
+    status.label + '</span>';
+}
+
+/* the term name, then a line with its tag and data product name */
+function nameBlockHtml(term) {
+  var tag = statusHtml(term);
+  return '<span class="tname">' + escapeText(term.name) + '</span>' +
+    (tag ? '<span class="tmeta">' + tag +
+      (term.product ? '<code class="pname">' + productNameHtml(term.product) + '</code>' : '') + '</span>' : '');
+}
+
+/* the kinds of a term that sit inside it, such as formative and summative feedback */
+function childrenOf(id) {
+  return Object.keys(window.PLACEMENT.parent).filter(function (childId) { return window.PLACEMENT.parent[childId] === id; });
+}
+
+/* everything the .md says about a term, as a definition list.
+   skipDefinition leaves the definition out, for layouts that show it already.
+   skipChildren leaves out kinds shown as their own cards, as in the 3P view. */
+function detailHtml(term, skipDefinition, skipChildren) {
+  function row(label, text) {
+    return text ? '<dt>' + label + '</dt><dd>' + escapeText(text) + '</dd>' : "";
+  }
+  return '<dl class="detail">' +
+    (skipDefinition ? '' : '<dt>Definition</dt><dd>' + escapeText(term.definition) +
+      (term.note ? '<span class="dnote">' + escapeText(term.note) + '</span>' : '') + '</dd>') +
+    row("Formative assessment", term.formative) +
+    row("Summative assessment", term.summative) +
+    (skipChildren ? [] : childrenOf(term.id)).map(function (childId) {
+      return row(window.TERM_BY_ID[childId].name, window.TERM_BY_ID[childId].definition);
+    }).join("") +
+    row("Example", term.example) +
+    row("Also known as", term.aka) +
+    row("Why this term", term.why) +
+    row("What this term is not", term.not) +
+    row("Relates to", term.relates) +
+    '</dl>';
+}
+</script>
+<script>
+var chevron = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+  'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+var closeIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+  'stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+
+/* ---------- one card ---------- */
+function cardHtml(id, options) {
+  var term = TERM_BY_ID[id];
+  options = options || {};
+  var kind = statusOf(term).kind;
+  var classes = "card" + (kind !== "none" ? " " + kind : "") + (options.activity ? " activity" : "") +
+    (options.child ? " child" : "");
+  return '<button class="' + classes + '" data-term="' + id + '" aria-expanded="false"' +
+      (options.inlineDetail ? '' : ' aria-controls="reveal"') + '>' +
+    nameBlockHtml(term) +
+    '<span class="def">' + escapeText(firstSentence(term.definition)) + '</span>' +
+    (options.inlineDetail ? detailHtml(term, false, true).replace('class="detail"', 'class="detail stacked"') : '') +
+    '<span class="foot"><span class="cue">Details ' + chevron + '</span></span>' +
+    '</button>';
+}
+
+/* ---------- chronological: stages flowing top to bottom ---------- */
+function drawChronological() {
+  var html = '<div class="view-intro"><h2>Start to finish</h2></div><div class="stages">';
+  PLACEMENT.arrival.forEach(function (stage) {
+    html += '<section class="stage"><div class="stage-label"><h3>' + stage.title + '</h3></div>' +
+      '<div class="cards">' + stage.terms.map(function (id) { return cardHtml(id); }).join("") + '</div></section>';
+  });
+
+  /* around the simulation. Formative and summative feedback sit inside Feedback's details. */
+  var topLevel = PLACEMENT.activities.filter(function (id) { return !PLACEMENT.parent[id]; });
+  html += '</div><div class="around"><section class="stage"><div class="stage-label"><h3>Around the simulation</h3></div>' +
+    '<div class="cards">' + topLevel.map(function (id) { return cardHtml(id, {activity: true}); }).join("") +
+    '</div></section></div>';
+  return html;
+}
+
+/* ---------- alphabetical: the vocabulary ---------- */
+function rowHtml(id, isChild) {
+  var term = TERM_BY_ID[id];
+  return '<details class="row' + (isChild ? ' child' : '') + '" id="' + id + '"><summary>' +
+    '<span class="namecell">' + nameBlockHtml(term) + '</span>' +
+    /* the first sentence while closed, the full definition once open */
+    '<span class="def"><span class="short">' + escapeText(firstSentence(term.definition)) + '</span>' +
+      '<span class="full">' + escapeText(term.definition) + '</span>' +
+      (term.note ? '<span class="dnote">' + escapeText(term.note) + '</span>' : '') + '</span>' +
+    '<span class="cue">Details ' + chevron + '</span>' +
+    '</summary><div class="body">' + detailHtml(term, true) + '</div></details>';
+}
+
+function drawAlphabetical() {
+  var topLevel = TERMS.filter(function (term) { return !PLACEMENT.parent[term.id]; })
+    .sort(function (a, b) { return a.name.localeCompare(b.name); });
+  /* formative and summative feedback sit inside Feedback's details, as in Assessment */
+  return '<div class="view-intro"><h2>A to Z</h2></div>' +
+    topLevel.map(function (term) { return rowHtml(term.id); }).join("");
+}
+
+/* ---------- Purpose, Practice, Proof: columns of cards ---------- */
+function drawThreeP() {
+  return '<div class="view-intro"><h2>Purpose · Practice · Proof</h2></div><div class="threep">' +
+    PLACEMENT.threep.map(function (column) {
+      return '<div><div class="colhead"><h3>' + column.title + '</h3><p>' + column.ask + '</p></div><div class="stack">' +
+        column.terms.map(function (id) {
+          return cardHtml(id, {activity: PLACEMENT.activities.indexOf(id) !== -1, inlineDetail: true});
+        }).join("") + '</div></div>';
+    }).join("") + '</div>';
+}
+
+/* ---------- opening a card in the chronological view ---------- */
+var currentView = "chronological";
+
+function closeReveal() {
+  document.querySelectorAll(".reveal").forEach(function (panel) { panel.remove(); });
+  document.querySelectorAll('.card[aria-expanded="true"]').forEach(function (card) {
+    card.setAttribute("aria-expanded", "false");
+  });
+}
+
+/* one full-width panel under the row of the chosen card */
+function openReveal(card, moveFocus) {
+  var term = TERM_BY_ID[card.dataset.term];
+  var grid = card.closest(".cards");
+  var panel = document.createElement("div");
+  panel.className = "reveal";
+  panel.id = "reveal";
+  panel.tabIndex = -1;
+  panel.setAttribute("role", "region");
+  panel.setAttribute("aria-label", term.name);
+  panel.innerHTML = '<button class="close" aria-label="Close">' + closeIcon + '</button>' +
+    '<h3>' + escapeText(term.name) + '</h3>' +
+    (statusHtml(term) ? '<div class="tmeta">' + statusHtml(term) +
+      (term.product ? '<code class="pname">' + productNameHtml(term.product) + '</code>' : '') + '</div>' : '') +
+    detailHtml(term);
+  grid.appendChild(panel);
+
+  /* point at the middle of the chosen card */
+  var cardBox = card.getBoundingClientRect();
+  var gridBox = grid.getBoundingClientRect();
+  panel.style.setProperty("--pointer", (cardBox.left - gridBox.left + cardBox.width / 2 - 7) + "px");
+  card.setAttribute("aria-expanded", "true");
+
+  panel.querySelector(".close").addEventListener("click", function (event) {
+    event.stopPropagation();
+    closeReveal();
+    card.focus();
+  });
+  /* keyboard users land in the panel, without the page jumping */
+  if (moveFocus) { panel.focus({preventScroll: true}); }
+  var box = panel.getBoundingClientRect();
+  if (box.bottom > window.innerHeight) { panel.scrollIntoView({behavior: "smooth", block: "nearest"}); }
+}
+
+function toggleCard(card, moveFocus) {
+  var wasOpen = card.getAttribute("aria-expanded") === "true";
+  if (currentView === "threep") {
+    /* Purpose, Practice, Proof: the card itself grows */
+    card.setAttribute("aria-expanded", wasOpen ? "false" : "true");
+    return;
+  }
+  closeReveal();
+  if (!wasOpen) { openReveal(card, moveFocus); }
+}
+
+var drawers = {chronological: drawChronological, alphabetical: drawAlphabetical, threep: drawThreeP};
+function showView(viewKey, keepAddress) {
+  currentView = viewKey;
+  document.getElementById("board").innerHTML = drawers[viewKey]();
+  document.querySelectorAll(".chip[data-view]").forEach(function (chip) {
+    chip.setAttribute("aria-pressed", chip.dataset.view === viewKey ? "true" : "false");
+  });
+  if (!keepAddress) { history.replaceState(null, "", "#view=" + viewKey); }
+}
+
+/* ---------- wiring ---------- */
+document.querySelectorAll(".chip[data-view]").forEach(function (chip) {
+  chip.addEventListener("click", function () { showView(chip.dataset.view); });
+});
+document.getElementById("board").addEventListener("click", function (event) {
+  var card = event.target.closest(".card");
+  /* event.detail is 0 for a keyboard press, so focus moves into the panel then */
+  if (card) { toggleCard(card, event.detail === 0); }
+});
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Escape" && document.getElementById("reveal")) {
+    var open = document.querySelector('.card[aria-expanded="true"]');
+    closeReveal();
+    if (open) { open.focus(); }
+  }
+});
+
+/* the address can name a view and open a term: #view=threep&term=evidence */
+var address = new URLSearchParams(location.hash.slice(1));
+showView(drawers[address.get("view")] ? address.get("view") : "chronological", true);
+var startTerm = address.get("term");
+if (startTerm) {
+  var startCard = document.querySelector('.card[data-term="' + startTerm + '"]');
+  var startRow = document.getElementById(startTerm);
+  if (startCard) { toggleCard(startCard, false); }
+  else if (startRow && startRow.tagName === "DETAILS") { startRow.open = true; }
+}
+</script>
+</body>
+</html>
