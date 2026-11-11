@@ -318,7 +318,7 @@ header h1{margin-bottom:var(--s-300);}
 </main>
 
 <footer class="page-footer">
-    <span>Laerdal Medical · 04.11.2026</span>
+    <span>Laerdal Medical · 11.11.2026</span>
   </footer>
 
 </div>
@@ -562,7 +562,14 @@ function openReveal(card, moveFocus) {
     (statusHtml(term) ? '<div class="tmeta">' + statusHtml(term) +
       (term.product ? '<code class="pname">' + productNameHtml(term.product) + '</code>' : '') + '</div>' : '') +
     detailHtml(term);
-  grid.appendChild(panel);
+  /* find the last card on the same row as the chosen card, and put the panel right after it,
+     so the panel opens under the chosen card's row rather than at the end of the whole group */
+  var cardsInGroup = Array.prototype.slice.call(grid.querySelectorAll(":scope > .card"));
+  var lastCardOnRow = card;
+  cardsInGroup.forEach(function (otherCard) {
+    if (Math.abs(otherCard.offsetTop - card.offsetTop) < 4) { lastCardOnRow = otherCard; }
+  });
+  lastCardOnRow.after(panel);
 
   /* point at the middle of the chosen card */
   var cardBox = card.getBoundingClientRect();
@@ -591,6 +598,19 @@ function toggleCard(card, moveFocus) {
   closeReveal();
   if (!wasOpen) { openReveal(card, moveFocus); }
 }
+
+/* when the window changes width, the cards can wrap into different rows,
+   so move an open panel back under its card's new row */
+var resizeTimer = null;
+window.addEventListener("resize", function () {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(function () {
+    var openCard = document.querySelector('.card[aria-expanded="true"]');
+    if (!openCard || currentView === "threep") { return; }
+    closeReveal();
+    openReveal(openCard, false);
+  }, 150);
+});
 
 var drawers = {chronological: drawChronological, alphabetical: drawAlphabetical, threep: drawThreeP};
 function showView(viewKey, keepAddress) {
