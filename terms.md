@@ -118,17 +118,17 @@ The 18 approved terms for simulation assessment data, word for word from the [Da
 
 **Example.** The full transcript of a conversation with a virtual patient; the event log from a manikin session.
 
-**Relates to.** Evidence is taken from it; the assessment result is worked out from it.
+**Relates to.** Evidence is observed in or derived from it; the assessment result is worked out from it.
 
 *Data product: No · Operational data: Yes*
 
 ### Session evidence
 
-**Definition.** The specific part of an output that shows whether an expected action was performed.
+**Definition.** Anything observed in, or derived from, a session output that shows whether an expected action was performed, or any unexpected action relevant to performance.
 
-**Example.** The expected action is “calls for help”. The recording shows the participant saying “Please call the emergency team” at 01:20. That moment is the evidence.
+**Example.** The expected action is “calls for help”. The recording shows the participant saying “Please call the emergency team” at 01:20. That moment is the evidence. If the event log shows a different drug given than the scenario planned.
 
-**Relates to.** Found by matching the output against the expected actions in the assessment tool; the assessment result is derived from it.
+**Relates to.** Observed in or derived from the output, by comparing it with the expected actions in the assessment tool; the assessment result is derived from it.
 
 *Data product: No · Operational data: Yes*
 
