@@ -1,6 +1,6 @@
 # Data Model Terminology: approved terms
 
-The 18 approved terms for simulation assessment data, word for word from the [Data Model Terminology page](https://laerdal-medical.github.io/proddata-terminology/). The terminology skill reads its definitions from this file. Change a definition only through the master copy, described in the README.
+The approved terms for simulation assessment data, shown on the [Data Model Terminology page](https://laerdal-medical.github.io/proddata-terminology/). This file is the master copy. The terminology skill reads its definitions from here. Change a definition through a pull request, as the README describes.
 
 <!-- terms start -->
 
@@ -74,7 +74,7 @@ The 18 approved terms for simulation assessment data, word for word from the [Da
 
 *Data product: Yes (`scenario_assessment`)*
 
-## Competence / performance framework
+### Competence / performance framework
 
 **Definition.** A published description of the competencies or performance expectations for participants, used as the standard which scenarios and assessments are built against.
 
