@@ -325,31 +325,57 @@ header h1{margin-bottom:var(--s-300);}
 
 <script>
 /* ==========================================================================
-   The terms and their placement, read by index.html.
-
-   TERMS is copied word for word from notes/terminology.md.
-   check_terms.py compares every string in it with that file.
+   The terms come from terms.md, the master copy in this repo. The page reads
+   it every time it opens, so a change to terms.md shows here with no change
+   to this file.
    ======================================================================== */
-window.TERMS = [
-  {"id": "target-participant", "name": "Target participant", "product": "target_participant", "definition": "The intended individual, team, or unit, described by segment and experience level, for whom the learning outcomes are designed.", "example": "First-year nursing students; an emergency department team training in situ.", "aka": "Participant or learner. INACSL’s standard term is “participant (also known as learner)”.", "why": "“Participant” is role-based, so it works for an individual, a team or a unit. “Learner” implies one identified individual.", "not": "The identity of the people who take part in a session.", "relates": "Learning_outcome; Laerdal ID (the actual people who take part)."},
-  {"id": "learning-outcome", "name": "Learning outcome", "product": "learning_outcome", "definition": "A specific, observable statement of what participants should demonstrate in a session as a result of training.", "example": "“Uses closed-loop communication during a resuscitation.”", "aka": "Learning objective (widely used); training goal.", "relates": "Defines which expected actions are needed; creates the basis for scenarios; mapped to a competence / performance framework."},
-  {"id": "scenario", "name": "Scenario", "product": "scenario", "definition": "A structured representation of a real-world clinical situation, designed to provide the context for participants to practice and demonstrate expected actions in a safe environment.", "example": "A progressing clinical case, such as a deteriorating asthma patient; a cardiac arrest team session that ends in return of circulation.", "aka": "Clinical scenario (SSH / INACSL Healthcare Simulation Dictionary); case or patient case."},
-  {"id": "expected-actions", "name": "Expected actions", "product": "expected_actions", "definition": "The specific, observable actions participants are expected to perform to show a learning outcome has been achieved. Written for the scenario; an action can be marked critical when it is required.", "example": "Repeats back an order in closed-loop communication; chest compressions at the target depth.", "aka": "Critical actions (AHA checklists, SSET, vrClinicals); expected behaviours (Creighton CCEI); performance or behavioural indicators.", "relates": "Lives in the assessment tool; derived from the learning outcome."},
-  {"id": "assessment-tool", "name": "Assessment tool", "product": "assessment_tool", "definition": "A defined structure that sets out what participant performance is assessed against and how that performance is scored.", "example": "Creighton CCEI, Lasater Clinical Judgment Rubric, TeamSTEPPS Team Performance Observation Tool.", "aka": "Assessment or evaluation instrument; rubric and checklist are types of assessment tool.", "relates": "May apply to a framework; contains the expected actions."},
-  {"id": "scenario-assessment", "name": "Scenario assessment", "product": "scenario_assessment", "definition": "Brings together the expected and critical actions and scoring logic used to assess performance in a specific scenario.", "relates": "Assessment tool, learning outcomes, expected actions and scenario; scored to give the assessment result."},
-  {"id": "competence-performance-framework", "name": "Competence / performance framework", "product": "competence_performance_framework", "definition": "A published description of the competencies or performance expectations for participants, used as the standard which scenarios and assessments are built against.", "example": "AACN Essentials and NCSBN CJMM (nursing); EPAs (medical education); TeamSTEPPS (team performance); CanMEDS; ACGME Milestones.", "aka": "Competence framework (also written competency framework).", "relates": "Learning outcomes, expected actions and assessment tools are mapped to it."},
-  {"id": "modality", "name": "Modality", "product": "modality", "definition": "The format through which an educational or quality improvement activity is delivered.", "example": "Manikin-based simulation, virtual reality.", "aka": "Simulation method or type.", "relates": "Training session."},
-  {"id": "training-session", "name": "Training session", "product": "training_session", "definition": "A single run of a learning activity involving one or more participants, with a defined start and end (runs that time out or are abandoned also count). A run is one attempt. Repeating the activity or starting over begins a new training session, while pausing and resuming stay inside the same training session.", "example": "A YouSim conversation with a virtual patient; an abandoned chest pain scenario on SimMan with several participants.", "aka": "Simulation session; scenario run; session.", "not": "A user logging into a platform without taking part in a learning activity, e.g. creating a course on SimCapture or purchasing a product on Laerdal Connect.", "relates": "Scenario; modality; output; assessment result."},
-  {"id": "output", "name": "Session output", "definition": "Everything captured from a training session: transcript, audio or video, event log, facilitator annotations and completed forms.", "example": "The full transcript of a conversation with a virtual patient; the event log from a manikin session.", "relates": "Evidence is observed in or derived from it; the assessment result is worked out from it.", "operational": true},
-  {"id": "evidence", "name": "Session evidence", "definition": "Anything observed in, or derived from, a session output that shows whether an expected action was performed, or any unexpected action relevant to performance.", "example": "The expected action is “calls for help”. The recording shows the participant saying “Please call the emergency team” at 01:20. That moment is the evidence. If the event log shows a different drug given than the scenario planned.", "relates": "Observed in or derived from the output, by comparing it with the expected actions in the assessment tool; the assessment result is derived from it.", "operational": true},
-  {"id": "assessment-result", "name": "Assessment result", "product": "assessment_result", "definition": "The completed assessment tool, showing whether each expected action was achieved.", "example": "A completed Creighton evaluation with a score of 19 out of 20.", "aka": "SimCapture calls the completed record an “evaluation”. It can also be a score or a rating.", "relates": "Derived from evidence; forms the basis for feedback."},
-  {"id": "prebrief", "name": "Prebrief", "definition": "The orientation given to participants before a session begins. It sets out the learning outcomes and expectations, explains the environment, equipment and roles, and creates the psychological safety for the participants to engage and learn.", "operational": true},
-  {"id": "debrief", "name": "Debrief", "definition": "A facilitated conversation in which participants reflect on an experience, to explore and understand the relationships between events, actions, thoughts, feelings and performance outcomes. It is a guided dialogue that uncovers the assumptions behind participants’ actions, so they can be understood and, where needed, corrected.", "operational": true},
-  {"id": "assessment", "name": "Assessment", "definition": "The systematic process of gathering, interpreting and using information about participant performance to inform teaching, enhance learning and, ultimately, improve patient outcomes. Not merely a measurement of knowledge or skills but a dynamic, evidence-informed practice. Its result is the basis for feedback.", "formative": "Carried out during or after a learning experience to show progress, guide reflection and support mastery learning. Informs formative feedback.", "summative": "Used to judge competence against defined standards, often in high-stakes or credentialing contexts. Informs summative feedback."},
-  {"id": "feedback", "name": "Feedback", "definition": "Information and guidance given to participants about their performance or progress, based on an assessment, to improve their actions or behaviour. It can be on a screen, on paper, in conversation, live or afterwards. To be useful it should be clear, specific, timely and encourage active participation.", "note": "Feedback is based on an assessment but is not one."},
-  {"id": "formative-feedback", "name": "Formative feedback", "definition": "Ongoing guidance that helps participants see their strengths and areas for growth, given during or after a learning experience."},
-  {"id": "summative-feedback", "name": "Summative feedback", "definition": "Feedback that states how performance measured up at the end of a learning process, based on the assessment result, and points to next steps."}
-];
+window.TERMS = [];
+
+/* the id used in page addresses, such as #term=evidence. Two terms keep their
+   short ids so links shared before this change still open the right card. */
+var SHORT_IDS = {"Session output": "output", "Session evidence": "evidence"};
+function idFor(name) {
+  return SHORT_IDS[name] || name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+/* the bold labels in terms.md, and the field each one fills */
+var LABELS = {"Definition": "definition", "Example": "example", "Also known as": "aka",
+  "Why this term": "why", "What this term is not": "not", "Relates to": "relates",
+  "Formative assessment": "formative", "Summative assessment": "summative"};
+
+/* turn the text of terms.md into a list of terms. A #### heading is a kind of
+   the ### term above it, such as formative feedback under feedback. */
+function readTermsFile(text) {
+  var start = text.indexOf("<!-- terms start -->");
+  var end = text.indexOf("<!-- terms end -->");
+  if (start === -1 || end === -1) { throw new Error("terms.md is missing its start or end marker"); }
+  var terms = [], term = null, parentId = null;
+  text.slice(start, end).replace(/\r/g, "").split(/\n\s*\n/).forEach(function (block) {
+    block = block.trim();
+    var match;
+    if ((match = block.match(/^(#{2,4}) (.+)$/))) {
+      term = {id: idFor(match[2].trim()), name: match[2].trim()};
+      if (match[1] === "####" && parentId) { window.PLACEMENT.parent[term.id] = parentId; }
+      else { parentId = term.id; }
+      terms.push(term);
+      return;
+    }
+    if (!term || block === "" || block.charAt(0) === "<") { return; }
+    if ((match = block.match(/^\*\*(.+?)\.\*\* ([\s\S]+)$/)) && LABELS[match[1]]) {
+      term[LABELS[match[1]]] = match[2].trim();
+      return;
+    }
+    if ((match = block.match(/^\*Data product: (.+)\*$/))) {
+      var productName = match[1].match(/`([^`]+)`/);
+      if (productName) { term.product = productName[1]; }
+      if (/Operational data: Yes/.test(match[1])) { term.operational = true; }
+      return;
+    }
+    /* any other paragraph is a note under the definition */
+    term.note = term.note ? term.note + " " + block : block;
+  });
+  return terms;
+}
 
 /* ==========================================================================
    PLACEMENT holds page decisions, not definitions: when each term reaches
@@ -394,7 +420,26 @@ window.PLACEMENT = {
    HELPERS used by all three pages
    ======================================================================== */
 window.TERM_BY_ID = {};
-window.TERMS.forEach(function (term) { window.TERM_BY_ID[term.id] = term; });
+
+/* after terms.md loads: index the terms, drop page places for terms that
+   no longer exist, and collect new terms the page has no place for yet */
+window.UNPLACED = [];
+function prepareTerms(terms) {
+  window.TERMS = terms;
+  terms.forEach(function (term) { window.TERM_BY_ID[term.id] = term; });
+  function exists(id) { return Boolean(window.TERM_BY_ID[id]); }
+  var placed = {};
+  window.PLACEMENT.arrival.forEach(function (stage) {
+    stage.terms = stage.terms.filter(exists);
+    stage.terms.forEach(function (id) { placed[id] = true; });
+  });
+  window.PLACEMENT.activities = window.PLACEMENT.activities.filter(exists);
+  window.PLACEMENT.activities.forEach(function (id) { placed[id] = true; });
+  window.PLACEMENT.threep.forEach(function (column) { column.terms = column.terms.filter(exists); });
+  window.UNPLACED = terms.filter(function (term) {
+    return !placed[term.id] && !window.PLACEMENT.parent[term.id];
+  }).map(function (term) { return term.id; });
+}
 
 function escapeText(text) {
   return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -502,6 +547,11 @@ function drawChronological() {
   html += '</div><div class="around"><section class="stage"><div class="stage-label"><h3>Around the simulation</h3></div>' +
     '<div class="cards">' + topLevel.map(function (id) { return cardHtml(id, {activity: true}); }).join("") +
     '</div></section></div>';
+  if (UNPLACED.length) {
+    html += '<div class="around"><section class="stage"><div class="stage-label"><h3>New terms</h3></div>' +
+      '<div class="cards">' + UNPLACED.map(function (id) { return cardHtml(id, {activity: true}); }).join("") +
+      '</div></section></div>';
+  }
   return html;
 }
 
@@ -640,15 +690,32 @@ document.addEventListener("keydown", function (event) {
 });
 
 /* the address can name a view and open a term: #view=threep&term=evidence */
-var address = new URLSearchParams(location.hash.slice(1));
-showView(drawers[address.get("view")] ? address.get("view") : "chronological", true);
-var startTerm = address.get("term");
-if (startTerm) {
-  var startCard = document.querySelector('.card[data-term="' + startTerm + '"]');
-  var startRow = document.getElementById(startTerm);
-  if (startCard) { toggleCard(startCard, false); }
-  else if (startRow && startRow.tagName === "DETAILS") { startRow.open = true; }
+function startPage() {
+  var address = new URLSearchParams(location.hash.slice(1));
+  showView(drawers[address.get("view")] ? address.get("view") : "chronological", true);
+  var startTerm = address.get("term");
+  if (startTerm) {
+    var startCard = document.querySelector('.card[data-term="' + startTerm + '"]');
+    var startRow = document.getElementById(startTerm);
+    if (startCard) { toggleCard(startCard, false); }
+    else if (startRow && startRow.tagName === "DETAILS") { startRow.open = true; }
+  }
 }
+
+/* read terms.md from this site, then draw the page */
+fetch("terms.md", {cache: "no-cache"})
+  .then(function (response) {
+    if (!response.ok) { throw new Error("terms.md answered " + response.status); }
+    return response.text();
+  })
+  .then(function (text) {
+    prepareTerms(readTermsFile(text));
+    startPage();
+  })
+  .catch(function () {
+    document.getElementById("board").innerHTML = '<p class="view-intro">The terms could not be loaded. ' +
+      'Reload the page. If they still don\u2019t appear, tell the Product Data team that the page could not read terms.md.</p>';
+  });
 </script>
 </body>
 </html>
