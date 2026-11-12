@@ -6,7 +6,7 @@ This repo is the master copy of Laerdal's simulation assessment terminology. Rea
 
 - **terms.md:** the approved terms and their definitions. The terminology skill reads it to explain a flag.
 - **word-list.md:** the code names the skill flags, and the name it suggests for each. The skill reads it on every run.
-- **index.html:** the public page. Its definitions are typed into the file, so it does not update when terms.md changes.
+- **index.html:** the public page. It reads terms.md every time it opens, so a definition change shows on the page with no edit to index.html. The page decides only where each term sits in its three views. A new term appears under "New terms" until someone gives it a place in `PLACEMENT` inside index.html.
 
 The terminology skill lives in the `competency-qi-data-model` plugin in `Laerdal-Medical/dp-laerdal-skills`. The skill fetches terms.md and word-list.md from the main branch of this repo on every run, so a merged change reaches every user within five minutes. The skill holds no terms of its own. Change the skill only when the method changes, never to add or remove a term.
 
@@ -26,4 +26,5 @@ The terminology skill lives in the `competency-qi-data-model` plugin in `Laerdal
 - Never write a count of terms anywhere. Counts go stale.
 - Keep a name out of word-list.md until the team agrees it. The skill flags only names listed there, so an undecided name stays silent.
 - Changes go in through a pull request. The main branch needs one approving review from someone other than the author.
-- After a definition changes, tell the Product Data team, so they can update index.html and the internal copy of the page.
+- Keep the layout of terms.md: a `###` heading per term, `####` for a subterm, each label in bold followed by a full stop (`**Definition.**`), and the `*Data product: …*` line last. The page reads terms.md by that layout.
+- After a definition changes, tell the Product Data team, so they can update the internal copy of the page.
